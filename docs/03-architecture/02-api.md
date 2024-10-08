@@ -7,8 +7,8 @@
    3. updatedAt: Instant (дата изменения)
    4. orderNumber: String (номер заказа)
    5. status: OrderStatus (статус заказа)
-   5. bestPackage: Item? (лучшая упаковка, внешний ключ)
-   6. quantity: Int (количество лучшей упаковки)
+   6. packages: List<PackageType> (выбранный тип упаковки)
+   
 ## Функции (эндпониты)
 1. CRUDS (create, read, update, delete, search) для заказа (order)
 2. calculate - вычислить лучшую упаковку
@@ -24,3 +24,4 @@
    7. order: Order? (заказ, внешний ключ)
 ## Функции (эндпониты)
 1. create, read, delete для элементов заказа (item)
+2. availablePackage - возвращает список доступных упаковок для элемента.
