@@ -5,13 +5,21 @@ plugins {
 group = "ru.otus.otuskotlin.marketplace"
 version = "1.0-SNAPSHOT"
 
-allprojects {
-    repositories {
-        mavenCentral()
-    }
+repositories {
+    mavenCentral()
 }
 
 subprojects {
+    repositories {
+        mavenCentral()
+    }
     group = rootProject.group
     version = rootProject.version
+}
+
+tasks {
+    create("check") {
+        group = "verification"
+        dependsOn(gradle.includedBuild("delivery-app").task(":check"))
+    }
 }
