@@ -1,4 +1,4 @@
-rootProject.name = "delivery-app"
+rootProject.name = "order-linker-be"
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -19,8 +19,5 @@ pluginManagement {
     }
 }
 
-// Включает вот такую конструкцию в gradle.build.kts
-//implementation(projects.m2l6Gradle.sub1.ssub1)
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-include(":order-linker")
+include(":order-linker-order-api-v1-jackson")
+include(":order-linker-item-api-v1-jackson")

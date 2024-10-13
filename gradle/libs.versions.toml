@@ -1,6 +1,10 @@
 [versions]
 kotlin = "2.0.0"
 kotest = "5.8.0"
+kotlinx-datetime = "0.5.0"
+binaryCompabilityValidator = "0.13.2"
+openapi-generator = "7.3.0"
+jackson = "2.16.1"
 
 # BASE
 jvm-compiler = "17"
@@ -8,9 +12,13 @@ jvm-language = "21"
 
 [libraries]
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-plugin-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.13.2"
+plugin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binaryCompabilityValidator" }
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 plugin-toolchains = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "0.5.0" }
+openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }
