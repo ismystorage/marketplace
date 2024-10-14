@@ -210,8 +210,6 @@ components:
       type: object
       description: Объект описывает свойства, одинаковые для create и update
       properties:
-        id:
-          $ref: '#/components/schemas/ItemId'
         length:
           type: integer
           description:  Длина в миллиметрах
