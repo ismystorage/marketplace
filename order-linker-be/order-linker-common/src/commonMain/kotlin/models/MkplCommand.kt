@@ -7,5 +7,5 @@ enum class MkplCommand {
     UPDATE,
     DELETE,
     SEARCH,
-    OFFERS,
+    CALCULATE,
 }

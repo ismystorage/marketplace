@@ -1,63 +1,65 @@
-//package ru.otus.otuskotlin.marketplace.mappers.v1
+//package ru.otus.otuskotlin.marketplace.mappers.v1.item
 //
 //import ru.otus.otuskotlin.marketplace.api.v1.models.*
-//import ru.otus.otuskotlin.marketplace.common.MkplContext
+//import ru.otus.otuskotlin.marketplace.common.MkplOrderContext
 //import ru.otus.otuskotlin.marketplace.common.exceptions.UnknownMkplCommand
 //import ru.otus.otuskotlin.marketplace.common.models.*
+//import ru.otus.otuskotlin.marketplace.common.models.order.MkplOrder
+//import ru.otus.otuskotlin.marketplace.common.models.order.MkplOrderId
 //
-//fun MkplContext.toTransportAd(): IResponse = when (val cmd = command) {
+//fun MkplOrderContext.toTransportAd(): IResponse = when (val cmd = command) {
 //    MkplCommand.CREATE -> toTransportCreate()
 //    MkplCommand.READ -> toTransportRead()
 //    MkplCommand.UPDATE -> toTransportUpdate()
 //    MkplCommand.DELETE -> toTransportDelete()
 //    MkplCommand.SEARCH -> toTransportSearch()
-//    MkplCommand.OFFERS -> toTransportOffers()
+//    MkplCommand.CALCULATE -> toTransportOffers()
 //    MkplCommand.NONE -> throw UnknownMkplCommand(cmd)
 //}
 //
-//fun MkplContext.toTransportCreate() = AdCreateResponse(
+//fun MkplOrderContext.toTransportCreate() = OrderCreateResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ad = adResponse.toTransportAd()
+//    order = adResponse.toTransportAd()
 //)
 //
-//fun MkplContext.toTransportRead() = AdReadResponse(
+//fun MkplOrderContext.toTransportRead() = OrderReadResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ad = adResponse.toTransportAd()
+//    order = adResponse.toTransportAd()
 //)
 //
-//fun MkplContext.toTransportUpdate() = AdUpdateResponse(
+//fun MkplOrderContext.toTransportUpdate() = OrderUpdateResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ad = adResponse.toTransportAd()
+//    order = adResponse.toTransportAd()
 //)
 //
-//fun MkplContext.toTransportDelete() = AdDeleteResponse(
+//fun MkplOrderContext.toTransportDelete() = OrderDeleteResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ad = adResponse.toTransportAd()
+//    order = adResponse.toTransportAd()
 //)
 //
-//fun MkplContext.toTransportSearch() = AdSearchResponse(
+//fun MkplOrderContext.toTransportSearch() = OrderSearchResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ads = adsResponse.toTransportAd()
+//    orders = adsResponse.toTransportAd()
 //)
 //
-//fun MkplContext.toTransportOffers() = AdOffersResponse(
+//fun MkplOrderContext.toTransportOffers() = OrderCalculateResponse(
 //    result = state.toResult(),
 //    errors = errors.toTransportErrors(),
-//    ads = adsResponse.toTransportAd()
+//    orders = adsResponse.toTransportAd()
 //)
 //
-//fun List<MkplAd>.toTransportAd(): List<AdResponseObject>? = this
+//fun List<MkplOrder>.toTransportAd(): List<OrderResponseObject>? = this
 //    .map { it.toTransportAd() }
 //    .toList()
 //    .takeIf { it.isNotEmpty() }
 //
-//private fun MkplAd.toTransportAd(): AdResponseObject = AdResponseObject(
-//    id = id.takeIf { it != MkplAdId.NONE }?.asString(),
+//private fun MkplOrder.toTransportAd(): OrderResponseObject = OrderResponseObject(
+//    id = id.takeIf { it != MkplOrderId.NONE }?.asString(),
 //    title = title.takeIf { it.isNotBlank() },
 //    description = description.takeIf { it.isNotBlank() },
 //    ownerId = ownerId.takeIf { it != MkplUserId.NONE }?.asString(),
@@ -66,24 +68,24 @@
 //    permissions = permissionsClient.toTransportAd(),
 //)
 //
-//private fun Set<MkplAdPermissionClient>.toTransportAd(): Set<AdPermissions>? = this
+//private fun Set<MkplAdPermissionClient>.toTransportAd(): Set<OrderPermissions>? = this
 //    .map { it.toTransportAd() }
 //    .toSet()
 //    .takeIf { it.isNotEmpty() }
 //
 //private fun MkplAdPermissionClient.toTransportAd() = when (this) {
-//    MkplAdPermissionClient.READ -> AdPermissions.READ
-//    MkplAdPermissionClient.UPDATE -> AdPermissions.UPDATE
-//    MkplAdPermissionClient.MAKE_VISIBLE_OWNER -> AdPermissions.MAKE_VISIBLE_OWN
-//    MkplAdPermissionClient.MAKE_VISIBLE_GROUP -> AdPermissions.MAKE_VISIBLE_GROUP
-//    MkplAdPermissionClient.MAKE_VISIBLE_PUBLIC -> AdPermissions.MAKE_VISIBLE_PUBLIC
-//    MkplAdPermissionClient.DELETE -> AdPermissions.DELETE
+//    MkplAdPermissionClient.READ -> OrderPermissions.READ
+//    MkplAdPermissionClient.UPDATE -> OrderPermissions.UPDATE
+//    MkplAdPermissionClient.MAKE_VISIBLE_OWNER -> OrderPermissions.MAKE_VISIBLE_OWN
+//    MkplAdPermissionClient.MAKE_VISIBLE_GROUP -> OrderPermissions.MAKE_VISIBLE_GROUP
+//    MkplAdPermissionClient.MAKE_VISIBLE_PUBLIC -> OrderPermissions.MAKE_VISIBLE_PUBLIC
+//    MkplAdPermissionClient.DELETE -> OrderPermissions.DELETE
 //}
 //
-//private fun MkplVisibility.toTransportAd(): AdVisibility? = when (this) {
-//    MkplVisibility.VISIBLE_PUBLIC -> AdVisibility.PUBLIC
-//    MkplVisibility.VISIBLE_TO_GROUP -> AdVisibility.REGISTERED_ONLY
-//    MkplVisibility.VISIBLE_TO_OWNER -> AdVisibility.OWNER_ONLY
+//private fun MkplVisibility.toTransportAd(): OrderVisibility? = when (this) {
+//    MkplVisibility.VISIBLE_PUBLIC -> OrderVisibility.PUBLIC
+//    MkplVisibility.VISIBLE_TO_GROUP -> OrderVisibility.REGISTERED_ONLY
+//    MkplVisibility.VISIBLE_TO_OWNER -> OrderVisibility.OWNER_ONLY
 //    MkplVisibility.NONE -> null
 //}
 //

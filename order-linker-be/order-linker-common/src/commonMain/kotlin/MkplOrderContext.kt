@@ -1,0 +1,26 @@
+package ru.otus.otuskotlin.marketplace.common
+
+import kotlinx.datetime.Instant
+import ru.otus.otuskotlin.marketplace.common.models.MkplCommand
+import ru.otus.otuskotlin.marketplace.common.models.MkplError
+import ru.otus.otuskotlin.marketplace.common.models.MkplState
+import ru.otus.otuskotlin.marketplace.common.models.MkplWorkMode
+import ru.otus.otuskotlin.marketplace.common.models.order.*
+import ru.otus.otuskotlin.marketplace.common.stubs.MkplStubs
+
+data class MkplOrderContext(
+    var command: MkplCommand = MkplCommand.NONE,
+    var state: MkplState = MkplState.NONE,
+    val errors: MutableList<MkplError> = mutableListOf(),
+
+    var workMode: MkplWorkMode = MkplWorkMode.PROD,
+    var stubCase: MkplStubs = MkplStubs.NONE,
+
+    var requestId: MkplRequestId = MkplRequestId.NONE,
+    var timeStart: Instant = Instant.NONE,
+    var adRequest: MkplOrder = MkplOrder(),
+    var adFilterRequest: MkplOrderFilter = MkplOrderFilter(),
+
+    var adResponse: MkplOrder = MkplOrder(),
+    var adsResponse: MutableList<MkplOrder> = mutableListOf(),
+    )

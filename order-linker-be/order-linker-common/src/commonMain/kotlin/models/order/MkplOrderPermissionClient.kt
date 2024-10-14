@@ -1,6 +1,6 @@
-package ru.otus.otuskotlin.marketplace.common.models
+package ru.otus.otuskotlin.marketplace.common.models.order
 
-enum class MkplAdPermissionClient {
+enum class MkplOrderPermissionClient {
     READ,
     UPDATE,
     DELETE,

@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.marketplace.common.models
+package ru.otus.otuskotlin.marketplace.common.models.order
 
 enum class MkplVisibility {
     NONE,
