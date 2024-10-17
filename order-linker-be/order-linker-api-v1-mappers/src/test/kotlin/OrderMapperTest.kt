@@ -34,7 +34,7 @@ println(req)
         assertEquals(MkplWorkMode.STUB, context.workMode)
 
 
-        assertEquals(MkplVisibility.VISIBLE_PUBLIC, context.adRequest.visibility)
+        assertEquals(MkplVisibility.VISIBLE_PUBLIC, context.orderRequest.visibility)
 
     }
 
@@ -43,7 +43,7 @@ println(req)
         val context = MkplOrderContext(
             requestId = MkplRequestId("1234"),
             command = MkplCommand.CREATE,
-            adResponse = MkplOrder(
+            orderResponse = MkplOrder(
                 createdAt = Clock.System.now().toString(),
                 updatedAt = "",
                 orderNumber = "",

@@ -19,8 +19,8 @@ fun MkplOrderContext.fromTransport(request: IRequest) = when (request) {
     else -> throw UnknownRequestClass(request.javaClass)
 }
 
-private fun String?.toAdId() = this?.let { MkplOrderId(it) } ?: MkplOrderId.NONE
-private fun String?.toAdWithId() = MkplOrder(id = this.toAdId())
+private fun String?.toOrderId() = this?.let { MkplOrderId(it) } ?: MkplOrderId.NONE
+private fun String?.toAdWithId() = MkplOrder(id = this.toOrderId())
 private fun String?.toAdLock() = this?.let { MkplOrderLock(it) } ?: MkplOrderLock.NONE
 
 private fun OrderDebug?.transportToWorkMode(): MkplWorkMode = when (this?.mode) {
@@ -44,41 +44,41 @@ private fun OrderDebug?.transportToStubCase(): MkplStubs = when (this?.stub) {
 
 fun MkplOrderContext.fromTransport(request: OrderCreateRequest) {
     command = MkplCommand.CREATE
-    adRequest = request.order?.toInternal() ?: MkplOrder()
+    orderRequest = request.order?.toInternal() ?: MkplOrder()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
 fun MkplOrderContext.fromTransport(request: OrderReadRequest) {
     command = MkplCommand.READ
-    adRequest = request.order.toInternal()
+    orderRequest = request.order.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
 private fun OrderReadObject?.toInternal(): MkplOrder = if (this != null) {
-    MkplOrder(id = id.toAdId())
+    MkplOrder(id = id.toOrderId())
 } else {
     MkplOrder()
 }
 
 fun MkplOrderContext.fromTransport(request: OrderUpdateRequest) {
     command = MkplCommand.UPDATE
-    adRequest = request.order?.toInternal() ?: MkplOrder()
+    orderRequest = request.order?.toInternal() ?: MkplOrder()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
 fun MkplOrderContext.fromTransport(request: OrderDeleteRequest) {
     command = MkplCommand.DELETE
-    adRequest = request.order.toInternal()
+    orderRequest = request.order.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
 private fun OrderDeleteObject?.toInternal(): MkplOrder = if (this != null) {
     MkplOrder(
-        id = id.toAdId(),
+        id = id.toOrderId(),
         lock = lock.toAdLock(),
     )
 } else {
@@ -87,14 +87,14 @@ private fun OrderDeleteObject?.toInternal(): MkplOrder = if (this != null) {
 
 fun MkplOrderContext.fromTransport(request: OrderSearchRequest) {
     command = MkplCommand.SEARCH
-    adFilterRequest = request.orderFilter.toInternal()
+    orderFilterRequest = request.orderFilter.toInternal()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
 
 fun MkplOrderContext.fromTransport(request: OrderCalculateRequest) {
     command = MkplCommand.CALCULATE
-    adRequest = request.order?.id.toAdWithId()
+    orderRequest = request.order?.id.toAdWithId()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }
@@ -113,7 +113,7 @@ private fun OrderCreateObject.toInternal(): MkplOrder = MkplOrder(
 )
 
 private fun OrderUpdateObject.toInternal(): MkplOrder = MkplOrder(
-    id = this.id.toAdId(),
+    id = this.id.toOrderId(),
     createdAt = this.createdAt ?: Clock.System.now().toString(),
     updatedAt = this.updatedAt ?: Clock.System.now().toString(),
     orderNumber = this.orderNumber ?: "",
