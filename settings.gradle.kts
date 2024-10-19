@@ -11,4 +11,4 @@ plugins {
 rootProject.name = "marketplace"
 
 //includeBuild("lessons")
-includeBuild("delivery-app")
+includeBuild("order-linker-be")

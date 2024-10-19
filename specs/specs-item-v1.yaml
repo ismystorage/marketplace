@@ -1,0 +1,435 @@
+openapi: 3.0.4
+info:
+  title: "Order linker - item ${VERSION_APP}"
+  description: Packaging calculation service
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: item
+    description: Элемент заказа
+paths:
+  /item/create:
+    post:
+      tags:
+        - item
+      summary: Create item
+      operationId: itemCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemCreateResponse'
+  /item/read:
+    post:
+      tags:
+        - item
+      summary: Read item
+      operationId: itemRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemReadResponse'
+  /item/update:
+    post:
+      tags:
+        - item
+      summary: Update item
+      operationId: itemUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemUpdateResponse'
+  /item/delete:
+    post:
+      tags:
+        - item
+      summary: Delete item
+      operationId: itemDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDeleteResponse'
+  /item/search:
+    post:
+      tags:
+        - item
+      summary: Search item
+      operationId: itemSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemSearchResponse'
+  /item/availablePackage:
+    post:
+      tags:
+        - item
+      summary: Available packages for the element
+      operationId: itemPackages
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemAvailablePackageRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemAvailablePackageResponse'
+
+components:
+  schemas:
+
+    ItemIRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/ItemCreateRequest'
+          read:   '#/components/schemas/ItemReadRequest'
+          update: '#/components/schemas/ItemUpdateRequest'
+          delete: '#/components/schemas/ItemDeleteRequest'
+          search: '#/components/schemas/ItemSearchRequest'
+          availablePackage: '#/components/schemas/ItemAvailablePackageRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/ItemCreateResponse'
+          read:   '#/components/schemas/ItemReadResponse'
+          update: '#/components/schemas/ItemUpdateResponse'
+          delete: '#/components/schemas/ItemDeleteResponse'
+          search: '#/components/schemas/ItemSearchResponse'
+          availablePackage: '#/components/schemas/ItemAvailablePackageResponse'
+          init: '#/components/schemas/ItemInitResponse'
+
+
+    ItemId:
+      type: string
+      description: Идентификатор элемента заказа
+    ItemLock:
+      type: string
+      description: Версия оптимистичной блокировки
+
+    BaseItem:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        id:
+          $ref: '#/components/schemas/ItemId'
+        length:
+          type: integer
+          description:  Длина в миллиметрах
+        width:
+          type: integer
+          description: Ширина в миллиметрах
+        height:
+          type: integer
+          description: Высота в миллиметрах
+        weight:
+          type: integer
+          description: Вес в граммах
+        type:
+          $ref: '#/components/schemas/ItemType'
+        orderId:
+          type: string
+          description: Идентификатор заказа
+
+    ItemType:
+      type: string
+      enum:
+        - ORDINARY
+        - GLASS
+        - ELECTRONICS
+        - TEMPERATURE
+
+    ItemInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    ItemCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseItem'
+
+    ItemCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemCreateObject'
+
+    ItemReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ItemId'
+
+    ItemReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemReadObject'
+
+    ItemUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseItem'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ItemId'
+            lock:
+              $ref: '#/components/schemas/ItemLock'
+
+    ItemUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemUpdateObject'
+
+    ItemDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ItemId'
+            lock:
+              $ref: '#/components/schemas/ItemLock'
+
+    ItemDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemDeleteObject'
+
+    ItemSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка, которая будет искаться в заявках
+        itemId:
+          $ref: '#/components/schemas/ItemId'
+
+    ItemSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            itemFilter:
+              $ref: '#/components/schemas/ItemSearchFilter'
+
+    ItemAvailablePackageObject:
+      $ref: '#/components/schemas/ItemReadObject'
+
+    ItemAvailablePackageRequest:
+      allOf:
+        - $ref: '#/components/schemas/ItemIRequest'
+        - $ref: '#/components/schemas/ItemRequestDebug'
+        - type: object
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemAvailablePackageObject'
+
+    ItemResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseItem'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/ItemId'
+            lock:
+              $ref: '#/components/schemas/ItemLock'
+
+    ItemResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом объявления
+          properties:
+            item:
+              $ref: '#/components/schemas/ItemResponseObject'
+
+    ItemResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemResponseObject'
+
+    ItemCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseSingle'
+
+    ItemReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseSingle'
+
+    ItemUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseSingle'
+
+    ItemDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseSingle'
+
+    ItemSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseMulti'
+
+    ItemAvailablePackageResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ItemResponseSingle'
+        - $ref: '#/components/schemas/ItemResponseMulti'
+
+    # STUBS ======================
+    ItemRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    ItemRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/ItemDebug'
+
+    ItemDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/ItemRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/ItemRequestDebugStubs'
+
+    ItemRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - badVisibility
+        - cannotDelete
+        - badSearchString

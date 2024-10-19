@@ -20,6 +20,6 @@ subprojects {
 tasks {
     create("check") {
         group = "verification"
-        dependsOn(gradle.includedBuild("delivery-app").task(":check"))
+        dependsOn(gradle.includedBuild("order-linker-be").task(":check"))
     }
 }
